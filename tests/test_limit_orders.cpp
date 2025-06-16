@@ -25,7 +25,7 @@ TEST(ORDERBOOK,MATCH_BUY_LIMIT_ORDER) {
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
     Order *order1=new Order(OrderType::MARKET,OrderSide::SELL,5,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
     PriceLevel1->add_order(order1);
 
     //Price 57.8
@@ -33,10 +33,10 @@ TEST(ORDERBOOK,MATCH_BUY_LIMIT_ORDER) {
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(OrderType::MARKET,OrderSide::SELL,1,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     Order *order3=new Order(OrderType::MARKET,OrderSide::SELL,1,Level2Price.dollars,Level2Price.cents);
-    order3->addId(3);
+    order3->setId(3);
 
     PriceLevel2->add_order(order2);
     PriceLevel2->add_order(order3);
@@ -46,13 +46,13 @@ TEST(ORDERBOOK,MATCH_BUY_LIMIT_ORDER) {
     PriceLevel *PriceLevel3=new PriceLevel(Level3Price);
 
     Order *order4=new Order(OrderType::MARKET,OrderSide::SELL,1,Level3Price.dollars,Level3Price.cents);
-    order4->addId(4);
+    order4->setId(4);
 
     Order *order5= new Order(OrderType::MARKET,OrderSide::SELL,13,Level3Price.dollars,Level3Price.cents);
-    order5->addId(5);
+    order5->setId(5);
 
     Order *order6= new Order(OrderType::MARKET,OrderSide::SELL,10,Level3Price.dollars,Level3Price.cents);
-    order6->addId(6);
+    order6->setId(6);
 
     PriceLevel3->add_order(order5);
     PriceLevel3->add_order(order6);
@@ -87,7 +87,7 @@ TEST(ORDERBOOK,MATCH_BUY_LIMIT_ORDER_NO_MATCH) {
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
     Order *order1=new Order(OrderType::MARKET,OrderSide::SELL,5,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
     PriceLevel1->add_order(order1);
 
     //Price 57.8
@@ -95,10 +95,10 @@ TEST(ORDERBOOK,MATCH_BUY_LIMIT_ORDER_NO_MATCH) {
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(OrderType::MARKET,OrderSide::SELL,1,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     Order *order3=new Order(OrderType::MARKET,OrderSide::SELL,1,Level2Price.dollars,Level2Price.cents);
-    order3->addId(3);
+    order3->setId(3);
 
     PriceLevel2->add_order(order2);
     PriceLevel2->add_order(order3);
@@ -129,7 +129,7 @@ TEST(ORDERBOOK, MATCH_BUY_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
     Order *order1=new Order(OrderType::MARKET,OrderSide::SELL,5,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
     PriceLevel1->add_order(order1);
 
     //Price 57.8
@@ -137,10 +137,10 @@ TEST(ORDERBOOK, MATCH_BUY_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(OrderType::MARKET,OrderSide::SELL,1,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     Order *order3=new Order(OrderType::MARKET,OrderSide::SELL,1,Level2Price.dollars,Level2Price.cents);
-    order3->addId(3);
+    order3->setId(3);
 
     PriceLevel2->add_order(order2);
     PriceLevel2->add_order(order3);
@@ -150,13 +150,13 @@ TEST(ORDERBOOK, MATCH_BUY_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     PriceLevel *PriceLevel3=new PriceLevel(Level3Price);
 
     Order *order4=new Order(OrderType::MARKET,OrderSide::SELL,1,Level3Price.dollars,Level3Price.cents);
-    order4->addId(4);
+    order4->setId(4);
 
     Order *order5=new Order(OrderType::MARKET,OrderSide::SELL,13,Level3Price.dollars,Level3Price.cents);
-    order5->addId(5);
+    order5->setId(5);
 
     Order *order6=new Order(OrderType::MARKET,OrderSide::SELL,10,Level3Price.dollars,Level3Price.cents);
-    order6->addId(6);
+    order6->setId(6);
 
     PriceLevel3->add_order(order4);
     PriceLevel3->add_order(order5);
@@ -203,7 +203,7 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER) {
 
     //these should not be matched
     Order *order1=new Order(OrderType::MARKET,OrderSide::BUY,5,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
     PriceLevel1->add_order(order1);
 
     //Price 57.8
@@ -211,10 +211,10 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER) {
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(OrderType::MARKET,OrderSide::BUY,1,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     Order *order3=new Order(OrderType::MARKET,OrderSide::BUY,1,Level2Price.dollars,Level2Price.cents);
-    order3->addId(3);
+    order3->setId(3);
 
     PriceLevel2->add_order(order2);
     PriceLevel2->add_order(order3);
@@ -223,13 +223,13 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER) {
     PriceLevel *PriceLevel3=new PriceLevel(Level3Price);
 
     Order *order4=new Order(OrderType::MARKET,OrderSide::BUY,1,Level3Price.dollars,Level3Price.cents);
-    order4->addId(4);
+    order4->setId(4);
 
     Order *order5=new Order(OrderType::MARKET,OrderSide::BUY,13,Level3Price.dollars,Level3Price.cents);
-    order5->addId(5);
+    order5->setId(5);
 
     Order *order6=new Order(OrderType::MARKET,OrderSide::BUY,10,Level3Price.dollars,Level3Price.cents);
-    order6->addId(6);
+    order6->setId(6);
 
     PriceLevel3->add_order(order4);
     PriceLevel3->add_order(order5);
@@ -265,7 +265,7 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER_NO_MATCH) {
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
     Order *order1=new Order(OrderType::MARKET,OrderSide::BUY,5,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
     PriceLevel1->add_order(order1);
 
     //Price 57.8
@@ -273,10 +273,10 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER_NO_MATCH) {
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(OrderType::MARKET,OrderSide::BUY,1,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     Order *order3=new Order(OrderType::MARKET,OrderSide::BUY,1,Level2Price.dollars,Level2Price.cents);
-    order3->addId(3);
+    order3->setId(3);
 
     PriceLevel2->add_order(order2);
     PriceLevel2->add_order(order3);
@@ -308,18 +308,18 @@ TEST(ORDERBOOK, MATCH_SELL_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
     Order *order1=new Order(OrderType::MARKET,OrderSide::BUY,5,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
     PriceLevel1->add_order(order1);
 
     Order *order2=new Order(OrderType::MARKET,OrderSide::BUY,2,Level1Price.dollars,Level1Price.cents);
-    order2->addId(2);
+    order2->setId(2);
     PriceLevel1->add_order(order2);
 
     Price Level2Price(100,7);
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order3=new Order(OrderType::MARKET,OrderSide::BUY,7,Level2Price.dollars,Level2Price.cents);
-    order3->addId(3);
+    order3->setId(3);
     PriceLevel2->add_order(order3);
 
 

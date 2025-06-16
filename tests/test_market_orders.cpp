@@ -45,7 +45,7 @@ TEST(BUY_MARKET_ORDER,FULL_MATCH){
     PriceLevel * PriceLevel1 = new PriceLevel(Level1Price);
 
     Order *order1 = new Order(MARKET,SELL,20,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
 
     PriceLevel1->add_order(order1);
 
@@ -55,7 +55,7 @@ TEST(BUY_MARKET_ORDER,FULL_MATCH){
     PriceLevel * PriceLevel2 = new PriceLevel(Level2Price);
 
     Order *order2 = new Order(MARKET,SELL,8,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     PriceLevel2->add_order(order2);
 
@@ -85,7 +85,7 @@ TEST(BUY_MARKET_ORDER,PARTIAL_MATCH){
     PriceLevel * PriceLevel1 = new PriceLevel(Level1Price);
 
     Order *order1 = new Order(MARKET,SELL,10,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
 
     PriceLevel1->add_order(order1);
 
@@ -96,7 +96,7 @@ TEST(BUY_MARKET_ORDER,PARTIAL_MATCH){
 
 
     Order *order2 = new Order(MARKET,SELL,8,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     PriceLevel2->add_order(order2);
 
@@ -150,7 +150,7 @@ TEST(SELL_MARKET_ORDER,FULL_MATCH){
     PriceLevel *PriceLevel1 = new PriceLevel(Level1Price);
 
     Order *order1=new Order(MARKET,BUY,10,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
 
     PriceLevel1->add_order(order1);
 
@@ -160,7 +160,7 @@ TEST(SELL_MARKET_ORDER,FULL_MATCH){
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(MARKET,BUY,12,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     PriceLevel2->add_order(order2);
 
@@ -194,7 +194,7 @@ TEST(SELL_MARKET_ORDER,PARTIAL_MATCH){
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
     Order *order1=new Order(MARKET,BUY,20,Level1Price.dollars,Level1Price.cents);
-    order1->addId(1);
+    order1->setId(1);
 
     PriceLevel1->add_order(order1);
 
@@ -204,7 +204,7 @@ TEST(SELL_MARKET_ORDER,PARTIAL_MATCH){
     PriceLevel *PriceLevel2=new PriceLevel(Level2Price);
 
     Order *order2=new Order(MARKET,BUY,8,Level2Price.dollars,Level2Price.cents);
-    order2->addId(2);
+    order2->setId(2);
 
     PriceLevel2->add_order(order2);
 

@@ -88,10 +88,10 @@ TEST(PRICE_LEVEL,REMOVE_ELEMENTS){
 
 
 
-  order1->addId(1);
+  order1->setId(1);
   level.add_order(order1);
 
-  order2->addId(2);
+  order2->setId(2);
   //test if the order is intact
   level.add_order(order2);
   level.remove_order(2);
@@ -150,9 +150,9 @@ TEST(FIFO,MATCH_AGAINST_SINGLE_ORDER) {
   expected_matches_list.addMatch(expected_order_match);
 
   Order *buy_order=new Order(OrderType::MARKET,OrderSide::BUY,20,pricelevel_price.dollars,pricelevel_price.cents);
-  buy_order->addId(1);
+  buy_order->setId(1);
   Order *sell_order=new Order(OrderType::MARKET,OrderSide::SELL,10,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order->addId(2);
+  sell_order->setId(2);
 
   input_price_level->add_order(sell_order);
 
@@ -182,16 +182,16 @@ TEST(FIFO,MATCH_AGAINST_MULTIPLE_SELL_ORDERS) {
   expected_matches_list.addMatch(expected_order_match3);
 
   Order *buy_order=new Order(OrderType::MARKET,OrderSide::BUY,20,pricelevel_price.dollars,pricelevel_price.cents);
-  buy_order->addId(1);
+  buy_order->setId(1);
 
   Order *sell_order=new Order(OrderType::MARKET,OrderSide::SELL,10,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order->addId(2);
+  sell_order->setId(2);
 
   Order *sell_order2=new Order(OrderType::MARKET,OrderSide::SELL,5,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order2->addId(3);
+  sell_order2->setId(3);
 
   Order *sell_order3 = new Order(OrderType::MARKET,OrderSide::SELL,7,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order3->addId(4);
+  sell_order3->setId(4);
 
   input_price_level->add_order(sell_order3);
   input_price_level->add_order(sell_order2);
@@ -216,17 +216,17 @@ TEST(FIFO,MATCH_AGAINST_INVALID_SELL_LIMIT_ORDER) {
   expected_matches_list.addMatch(expected_order_match3);
 
   Order *buy_order=new Order(OrderType::MARKET,OrderSide::BUY,20,pricelevel_price.dollars,pricelevel_price.cents);
-  buy_order->addId(1);
+  buy_order->setId(1);
 
   Order *sell_order=new Order(OrderType::MARKET,OrderSide::SELL,10,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order->addId(2);
+  sell_order->setId(2);
 
   //This order shouldn't be matched
   Order *sell_order2=new Order(OrderType::LIMIT,OrderSide::SELL,5,11,5);
-  sell_order2->addId(3);
+  sell_order2->setId(3);
 
   Order *sell_order3=new Order(OrderType::MARKET,OrderSide::SELL,7,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order3->addId(4);
+  sell_order3->setId(4);
 
   input_price_level->add_order(sell_order3);
   input_price_level->add_order(sell_order2);
@@ -252,16 +252,16 @@ TEST(FIFO,MATCH_AGAINST_VALID_SELL_LIMIT_ORDER) {
   expected_matches_list.addMatch(expected_order_match2);
 
   Order *buy_order=new Order(OrderType::MARKET,OrderSide::BUY,13,pricelevel_price.dollars,pricelevel_price.cents);
-  buy_order->addId(1);
+  buy_order->setId(1);
 
   Order *sell_order=new Order(OrderType::MARKET,OrderSide::SELL,10,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order->addId(2);
+  sell_order->setId(2);
 
   Order *sell_order2=new Order(OrderType::LIMIT,OrderSide::SELL,5,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order2->addId(3);
+  sell_order2->setId(3);
 
   Order *sell_order3=new Order(OrderType::MARKET,OrderSide::SELL,7,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order3->addId(4);
+  sell_order3->setId(4);
 
   input_price_level->add_order(sell_order3);
   input_price_level->add_order(sell_order2);
@@ -288,13 +288,13 @@ TEST(FIFO, MATCH_AGAINST_MULTIPLE_BUY_ORDERS) {
   Fifo algorithm;
   //order to be matched
   Order *sell_order=new Order(OrderType::MARKET,OrderSide::SELL,200,pricelevel_price.dollars,pricelevel_price.cents);
-  sell_order->addId(1);
+  sell_order->setId(1);
   //orders to be matched upon
   Order *order2=new Order(OrderType::MARKET,OrderSide::BUY,50,pricelevel_price.dollars,pricelevel_price.cents);
-  order2->addId(2);
+  order2->setId(2);
 
   Order *order3=new Order(OrderType::MARKET,OrderSide::BUY,75,pricelevel_price.dollars,pricelevel_price.cents);
-  order3->addId(3);
+  order3->setId(3);
 
 
   input_price_level->add_order(order2);
