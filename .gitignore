@@ -1,5 +1,5 @@
 cmake-build-debug
 GUI
 .idea
-
+build/
 tests/googletest
