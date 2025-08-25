@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "orderbook.h"
+#include "orderbook.hpp"
+#define DEFAULT_OWNERID 0
 
 bool equalMatchesList(MatchesList input,MatchesList expected) {
     if (input.matches.size() != expected.matches.size()) {
@@ -64,8 +65,8 @@ TEST(BUY_MARKET_ORDER,FULL_MATCH){
 
     MatchesList expectedResult;
 
-    OrderMatch match1(2,8,Level2Price,FULL);
-    OrderMatch match2(1,14,Level1Price,PARTIAL);
+    OrderMatch match1(DEFAULT_OWNERID,2,8,Level2Price,FULL);
+    OrderMatch match2(DEFAULT_OWNERID,1,14,Level1Price,PARTIAL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);
@@ -105,8 +106,8 @@ TEST(BUY_MARKET_ORDER,PARTIAL_MATCH){
 
     MatchesList expectedResult;
 
-    OrderMatch match1(2,8,Level2Price,FULL);
-    OrderMatch match2(1,10,Level1Price,FULL);
+    OrderMatch match1(DEFAULT_OWNERID,2,8,Level2Price,FULL);
+    OrderMatch match2(DEFAULT_OWNERID,1,10,Level1Price,FULL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);
@@ -169,8 +170,8 @@ TEST(SELL_MARKET_ORDER,FULL_MATCH){
 
     MatchesList expectedResult;
 
-    OrderMatch match1(2,12,Level2Price,FULL);
-    OrderMatch match2(1,10,Level1Price,FULL);
+    OrderMatch match1(DEFAULT_OWNERID,2,12,Level2Price,FULL);
+    OrderMatch match2(DEFAULT_OWNERID,1,10,Level1Price,FULL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);
@@ -213,8 +214,8 @@ TEST(SELL_MARKET_ORDER,PARTIAL_MATCH){
 
     MatchesList expectedResult;
 
-    OrderMatch match1(1,20,Level1Price,FULL);
-    OrderMatch match2(2,8,Level2Price,FULL);
+    OrderMatch match1(DEFAULT_OWNERID,1,20,Level1Price,FULL);
+    OrderMatch match2(DEFAULT_OWNERID,2,8,Level2Price,FULL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);

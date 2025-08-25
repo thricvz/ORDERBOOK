@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
-#include "orderbook.h"
+#include "orderbook.hpp"
+#define DEFAULT_OWNERID 0 
+//IMPROVEMENTS FOR FUTURE VERSIONS
+//NO MAGIC NUMBERS IN THE TEST (ESPECIALLY IN THE ID FIELDS)
 
-
-bool equalMatchesList(MatchesList input,MatchesList expected) {
+static bool equalMatchesList(MatchesList input,MatchesList expected) {
     if (input.matches.size() != expected.matches.size()) {
         return false;
     }
@@ -68,9 +70,9 @@ TEST(ORDERBOOK,MATCH_BUY_LIMIT_ORDER) {
 
     //THE MATCHING RESULT
     MatchesList expectedResult;
-    OrderMatch match1(1,5,Level1Price,OrderFillState::FULL);
-    OrderMatch match2(2,1,Level2Price,OrderFillState::FULL);
-    OrderMatch match3(3,1,Level2Price,OrderFillState::FULL);
+    OrderMatch match1(DEFAULT_OWNERID,1,5,Level1Price,OrderFillState::FULL);
+    OrderMatch match2(DEFAULT_OWNERID,2,1,Level2Price,OrderFillState::FULL);
+    OrderMatch match3(DEFAULT_OWNERID,3,1,Level2Price,OrderFillState::FULL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);
@@ -173,12 +175,12 @@ TEST(ORDERBOOK, MATCH_BUY_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
 
     //THE MATCHING RESULT
     MatchesList expectedResult;
-    OrderMatch match1(1,5,Level1Price,OrderFillState::FULL);
-    OrderMatch match2(2,1,Level2Price,OrderFillState::FULL);
-    OrderMatch match3(3,1,Level2Price,OrderFillState::FULL);
-    OrderMatch match4(4,1,Level3Price,OrderFillState::FULL);
-    OrderMatch match5(5,13,Level3Price,OrderFillState::FULL);
-    OrderMatch match6(6,10,Level3Price,OrderFillState::FULL);
+    OrderMatch match1(DEFAULT_OWNERID,1,5,Level1Price,OrderFillState::FULL);
+    OrderMatch match2(DEFAULT_OWNERID,2,1,Level2Price,OrderFillState::FULL);
+    OrderMatch match3(DEFAULT_OWNERID,3,1,Level2Price,OrderFillState::FULL);
+    OrderMatch match4(DEFAULT_OWNERID,4,1,Level3Price,OrderFillState::FULL);
+    OrderMatch match5(DEFAULT_OWNERID,5,13,Level3Price,OrderFillState::FULL);
+    OrderMatch match6(DEFAULT_OWNERID,6,10,Level3Price,OrderFillState::FULL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);
@@ -246,8 +248,8 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER) {
 
     //THE MATCHING RESULT
     MatchesList expectedResult;
-    OrderMatch match1(4,1,Level3Price,OrderFillState::FULL);
-    OrderMatch match2(5,6,Level3Price,OrderFillState::PARTIAL);
+    OrderMatch match1(DEFAULT_OWNERID,4,1,Level3Price,OrderFillState::FULL);
+    OrderMatch match2(DEFAULT_OWNERID,5,6,Level3Price,OrderFillState::PARTIAL);
 
     expectedResult.addMatch(match1);
     expectedResult.addMatch(match2);
@@ -304,6 +306,7 @@ TEST(ORDERBOOK,MATCH_SELL_LIMIT_ORDER_NO_MATCH) {
 
 TEST(ORDERBOOK, MATCH_SELL_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     // LEAST HE IS WILLING TO SELL FOR IS FOR 20
+    
     Price Level1Price(30,0);
     PriceLevel *PriceLevel1=new PriceLevel(Level1Price);
 
@@ -327,7 +330,7 @@ TEST(ORDERBOOK, MATCH_SELL_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     Order *sellOrder=new Order(OrderType::LIMIT,OrderSide::SELL,3,20,25);
 
     MatchesList expectedResult;
-    OrderMatch match1(3,3,Level2Price  ,OrderFillState::PARTIAL);
+    OrderMatch match1(DEFAULT_OWNERID,3,3,Level2Price  ,OrderFillState::PARTIAL);
     expectedResult.addMatch(match1);
 
 
@@ -340,7 +343,6 @@ TEST(ORDERBOOK, MATCH_SELL_LIMIT_ORDER_AGAINST_EXCEEDING_ORDERS) {
     EXPECT_TRUE(equalMatchesList(std::get<0>(MatchReturn),expectedResult));
 
 }
-
 
 
 

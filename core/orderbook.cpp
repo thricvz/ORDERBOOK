@@ -1,4 +1,4 @@
-#include "orderbook.h"
+#include "orderbook.hpp"
 
 
 
@@ -87,8 +87,9 @@ void PriceLevel::remove_order(int orderId){
     }
 }
 
-OrderMatch::OrderMatch(int id,int quantity_,Price price_,OrderFillState result){
-    orderId=id;
+OrderMatch::OrderMatch(int ownerId,int orderId,int quantity_,Price price_,OrderFillState result){
+    this->ownerId =ownerId; 
+    this->orderId=orderId;
     quantity=quantity_;
     matchingResult=result;
     price = price_;
@@ -98,6 +99,7 @@ bool OrderMatch::operator==(const OrderMatch &lhs) const {
     bool quantityEqual = (quantity == lhs.quantity);
     bool matchingResulEqual = (matchingResult == lhs.matchingResult);
     bool priceEqual = (price == lhs.price);
+    bool ownerIdEqual = (ownerId == lhs.ownerId);
     return idEqual && quantityEqual && matchingResulEqual && priceEqual;
 }
 
@@ -148,6 +150,11 @@ MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
     int currentOrderIndex =0;
     while (order->quantity>0 &&  currentOrderIndex < priceLevel->orders.size()) {
         Order *currentOrder = priceLevel->orders[currentOrderIndex];
+        
+        if(currentOrder->id == order->id || (currentOrder->type== MARKET && order->type==MARKET)){
+            currentOrderIndex++;
+            continue;
+        }
 
         if (currentOrder->type==OrderType::LIMIT ) {
             if ((currentOrder->side == OrderSide::SELL && order->price < currentOrder->price) || (currentOrder->side == OrderSide::BUY && currentOrder->price < order->price) ) {
@@ -156,15 +163,15 @@ MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
             }
         }
 
-        if (currentOrder->quantity>order->quantity) {
+        if (currentOrder->quantity > order->quantity) {
 
-            OrderMatch matchedOrder(currentOrder->id,order->quantity,currentOrder->price,OrderFillState::PARTIAL);
+            OrderMatch matchedOrder(currentOrder->ownerID,currentOrder->id,order->quantity,currentOrder->price,OrderFillState::PARTIAL);
             matches.addMatch(matchedOrder);
             currentOrder->quantity-=order->quantity;
             order->quantity=0;
             return matches;
         }else {
-            OrderMatch matchedOrder(currentOrder->id,currentOrder->quantity,currentOrder->price,OrderFillState::FULL);
+            OrderMatch matchedOrder(currentOrder->ownerID,currentOrder->id,currentOrder->quantity,currentOrder->price,OrderFillState::FULL);
             matches.addMatch(matchedOrder);
             order->quantity-=currentOrder->quantity;
             currentOrder->quantity=0;
