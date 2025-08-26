@@ -48,6 +48,8 @@ class PriceLevel{
         void add_order(Order *order);
         void remove_order(int orderId);
 };
+
+//this could have perfectly been a aggregate!!
 struct OrderMatch{
     
     int orderId;

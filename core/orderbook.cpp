@@ -151,7 +151,7 @@ MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
     while (order->quantity>0 &&  currentOrderIndex < priceLevel->orders.size()) {
         Order *currentOrder = priceLevel->orders[currentOrderIndex];
         
-        if(currentOrder->id == order->id || (currentOrder->type== MARKET && order->type==MARKET)){
+        if(currentOrder->ownerID == order->ownerID|| (currentOrder->type== MARKET && order->type==MARKET)){
             currentOrderIndex++;
             continue;
         }
