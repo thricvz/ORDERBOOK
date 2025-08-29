@@ -5,31 +5,20 @@
 
 #define DEFAULT_OWNERID 0
 
-// Demonstrate some basic assertions.
-TEST(PRICE_OBJECT,CREATE_EMPTY_OBJECT){
-  Price priceObj;
-  ASSERT_EQ(priceObj.dollars ,NULL);
-  ASSERT_EQ(priceObj.cents ,NULL);
-}
-
-TEST(PRICE_OBJECT,CREATE_OBJECT){
-  Price priceObj(25,10);
-  ASSERT_EQ(priceObj.dollars ,25);
-  ASSERT_EQ(priceObj.cents ,10);
-}
-
 
 TEST(ORDER,CREATE_OBJECT){
-  Order order1(OrderType::LIMIT,OrderSide::BUY,96,30,12);
+  Order order1(OrderType::LIMIT,OrderSide::BUY,96,Price{30,12},2);
   ASSERT_EQ(order1.type ,OrderType::LIMIT);
   ASSERT_EQ(order1.side ,OrderSide::BUY);
   ASSERT_EQ(order1.price.cents ,12);
   ASSERT_EQ(order1.price.dollars ,30);
+  ASSERT_EQ(order1.id ,30);
+	
 }
 
 
 TEST(PRICE_LEVEL,CREATE_OBJECT){
-  Price price(30,68);
+  Price price{30,68};
   PriceLevel level(price);
   ASSERT_EQ(level.price.cents ,68);
   ASSERT_EQ(level.price.dollars ,30);
@@ -37,11 +26,10 @@ TEST(PRICE_LEVEL,CREATE_OBJECT){
 }
 
 TEST(PRICE_LEVEL,ADD_ELEMENTS){
-  Price price(30,68);
+  Price price{30,68};
   PriceLevel level(price);
-  Order order1(OrderType::LIMIT,OrderSide::BUY,26,30,12);
+  Order order1(OrderType::LIMIT,OrderSide::BUY,26,{30,12},1);
 
-  order1.id = 1;
   level.add_order(&order1);
   ASSERT_EQ(level.orders.size(),1);
 
@@ -53,10 +41,10 @@ TEST(PRICE_LEVEL,ADD_ELEMENTS){
 
 
 TEST(PRICE_LEVEL,REMOVE_ELEMENTS){
-  Price price(30,68);
+  Price price{30,68};
   PriceLevel level(price);
-  Order *order1=new Order(OrderType::LIMIT,OrderSide::BUY,20,30,12);
-  Order *order2=new Order(OrderType::LIMIT,OrderSide::BUY,25,30,12);
+  Order *order1=new Order(OrderType::LIMIT,OrderSide::BUY,20,{30,12},1);
+  Order *order2=new Order(OrderType::LIMIT,OrderSide::BUY,25,{30,12},2);
 
 
 
@@ -112,27 +100,3 @@ TEST(QUICKSORT,REVERSE_SORT) {
 
 
 }
-TEST(FIFO,MATCH_AGAINST_SINGLE_ORDER) {
-}
-
-
-//add tests for limit orders for checking compatibility
-
-
-TEST(FIFO,MATCH_AGAINST_MULTIPLE_SELL_ORDERS) {
-
-}
-TEST(FIFO,MATCH_AGAINST_INVALID_SELL_LIMIT_ORDER) {
-
-}
-
-TEST(FIFO,MATCH_AGAINST_VALID_SELL_LIMIT_ORDER) {
-
-
-}
-
-TEST(FIFO, MATCH_AGAINST_MULTIPLE_BUY_ORDERS) {
-
-}
-
-

@@ -8,10 +8,8 @@
 
 class Price{
     public:
-        int dollars;
-        int cents;
-        Price(int dollars_,int cents_);
-        Price();
+        int dollars{};
+        int cents{};
 
         bool operator==(const Price& __rhs) const;
         bool operator<(const Price& __rhs) const;
@@ -27,8 +25,8 @@ class Order{
         int ownerID{0};
         int oriqinalQuantity;
         std::chrono::time_point<std::chrono::steady_clock> timestamp;
-        Order(OrderType _type,OrderSide _side,int quantity_,int _dollars,int _cents);
-        Order(OrderType _type,OrderSide _side,int quantity_);
+        Order(OrderType _type,OrderSide _side,int quantity_,Price price,int id);
+        Order(OrderType _type,OrderSide _side,int quantity_,int id);
         Order();
 
         void setId(int id_);

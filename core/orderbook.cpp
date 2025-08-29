@@ -2,14 +2,6 @@
 
 
 
-Price::Price(int dollars_,int cents_){
-    dollars=dollars_;
-    cents=cents_;
-}
-Price::Price(){
-    dollars=0;
-    cents=0;
-}
 
 bool Price::operator==(const Price& __rhs) const {
     return (dollars == __rhs.dollars) && (cents == __rhs.cents);
@@ -23,16 +15,16 @@ bool Price::operator<(const Price& __rhs) const {
         return true;
     return false;
 }
-    Order::Order(OrderType _type,OrderSide _side,int quantity_,int _dollars,int _cents){
+Order::Order(OrderType _type,OrderSide _side,int quantity_,Price price,int id){
                 type = _type;
                 side = _side;
                 quantity = quantity_;
                 oriqinalQuantity = quantity_;
-                price = Price(_dollars,_cents);
-                int id{};
+                this->price = price;
                 timestamp=std::chrono::steady_clock::now();
+		this->id = id;
     };
-Order::Order(OrderType _type,OrderSide _side,int quantity_) : Order(_type,_side,quantity_,0,0){
+Order::Order(OrderType _type,OrderSide _side,int quantity_,int id) : Order(_type,_side,quantity_,{0,0},id){
     
 };
 
