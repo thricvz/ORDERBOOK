@@ -8,3 +8,13 @@
 bool equalVectorPtr(std::vector<int*> input,std::vector<int*> expected);
 
 bool equalMatchesList(MatchesList input,MatchesList expected);
+
+struct orderDetails{
+	int orderQuantity{};
+	int orderID{};
+};
+PriceLevel* createPriceLevel(OrderType orderType,OrderSide orderSide,
+			Price priceLevelPrice, std::vector<orderDetails> orders);
+
+
+std::pair<MatchesList,OrderFillState> createOrderBookAndMatch(Order *entryOrder,std::vector<PriceLevel*> restingPriceLevels,matchingAlgorithm* algorithm);

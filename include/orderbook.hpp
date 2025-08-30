@@ -42,7 +42,7 @@ class PriceLevel{
 
         PriceLevel(Price price_);
         PriceLevel();
-
+	~PriceLevel();
         void add_order(Order *order);
         void remove_order(int orderId);
 };
@@ -116,7 +116,8 @@ class OrderBook{
             //returns a pair with the list of matches and final state of the order matched
             std::pair<MatchesList,OrderFillState> match(Order *order);
             
-            
+      	    ~OrderBook(); 
+
             // implement a function for each case
             std::pair<MatchesList,OrderFillState> matchBuyLimit(Order *order);
             std::pair<MatchesList,OrderFillState> matchSellLimit(Order *order);

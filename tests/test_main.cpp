@@ -28,9 +28,9 @@ TEST(PRICE_LEVEL,CREATE_OBJECT){
 TEST(PRICE_LEVEL,ADD_ELEMENTS){
   Price price{30,68};
   PriceLevel level(price);
-  Order order1(OrderType::LIMIT,OrderSide::BUY,26,{30,12},1);
+  Order* order1= new Order(OrderType::LIMIT,OrderSide::BUY,26,{30,12},1);
 
-  level.add_order(&order1);
+  level.add_order(order1);
   ASSERT_EQ(level.orders.size(),1);
 
   ASSERT_EQ(level.orders[0]->type ,OrderType::LIMIT);

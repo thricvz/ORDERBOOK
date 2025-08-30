@@ -79,6 +79,12 @@ void PriceLevel::remove_order(int orderId){
     }
 }
 
+PriceLevel::~PriceLevel(){
+	for(auto order:orders){
+		delete order;
+	};
+};
+
 OrderMatch::OrderMatch(int ownerId,int orderId,int quantity_,Price price_,OrderFillState result){
     this->ownerId =ownerId; 
     this->orderId=orderId;
@@ -93,6 +99,7 @@ bool OrderMatch::operator==(const OrderMatch &lhs) const {
     bool priceEqual = (price == lhs.price);
     bool ownerIdEqual = (ownerId == lhs.ownerId);
     return idEqual && quantityEqual && matchingResulEqual && priceEqual;
+
 }
 
 
@@ -209,9 +216,7 @@ std::pair<MatchesList,OrderFillState> OrderBook::match(Order *order) {
 };
 
 
-///sell limit at least for this amount
-
-//buy limit at most this amount
+//need to implement a destructor for the orderbook class
 
 std::pair<MatchesList,OrderFillState> OrderBook::matchBuyLimit(Order *order) {
     int currentPriceLevel = 0;
@@ -266,6 +271,17 @@ std::pair<MatchesList,OrderFillState> OrderBook::matchSellLimit(Order *order){
     return std::pair<MatchesList, OrderFillState>(allMatches, entryOrderState);
 
 };
+
+OrderBook::~OrderBook(){
+
+	for(auto pricelevel:SellOrders){
+		delete pricelevel;	
+	};
+
+	for(auto pricelevel:BuyOrders){
+		delete pricelevel;	
+	};
+}; 
 
 std::pair<MatchesList,OrderFillState> OrderBook::matchBuyMarket(Order *order){
     int currentPriceLevel = 0;
