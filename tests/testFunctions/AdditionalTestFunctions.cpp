@@ -1,5 +1,5 @@
 #include "AdditionalTestFunctions.hpp"
-bool equalMatchesList(MatchesList input,MatchesList expected) {
+bool MatchesListAreEqual(MatchesList input,MatchesList expected) {
     if (input.matches.size() != expected.matches.size()) {
         return false;
     }

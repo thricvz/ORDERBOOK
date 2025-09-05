@@ -50,18 +50,17 @@ class PriceLevel{
 //this could have perfectly been a aggregate!!
 struct OrderMatch{
     
-    int orderId;
-    int ownerId;
-    int quantity;
-    OrderFillState matchingResult;
-    Price price;
+    int orderId{};
+    int ownerId{};
+    int quantity{};
+    Price price{};
+    OrderFillState matchingResult{};
 
-    OrderMatch(int ownerId,int orderId,int quantity_,Price price_,OrderFillState result);
     bool operator==(const OrderMatch &lhs) const;
 };
 
 struct MatchesList{
-    std::vector<OrderMatch> matches;
+    std::vector<OrderMatch> matches{};
 
     void addMatch(OrderMatch order);
 

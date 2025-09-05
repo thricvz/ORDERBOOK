@@ -85,13 +85,6 @@ PriceLevel::~PriceLevel(){
 	};
 };
 
-OrderMatch::OrderMatch(int ownerId,int orderId,int quantity_,Price price_,OrderFillState result){
-    this->ownerId =ownerId; 
-    this->orderId=orderId;
-    quantity=quantity_;
-    matchingResult=result;
-    price = price_;
-}
 bool OrderMatch::operator==(const OrderMatch &lhs) const {
     bool idEqual = (orderId == lhs.orderId);
     bool quantityEqual = (quantity == lhs.quantity);
@@ -164,13 +157,13 @@ MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
 
         if (currentOrder->quantity > order->quantity) {
 
-            OrderMatch matchedOrder(currentOrder->ownerID,currentOrder->id,order->quantity,currentOrder->price,OrderFillState::PARTIAL);
+            OrderMatch matchedOrder{currentOrder->ownerID,currentOrder->id,order->quantity,currentOrder->price,OrderFillState::PARTIAL};
             matches.addMatch(matchedOrder);
             currentOrder->quantity-=order->quantity;
             order->quantity=0;
             return matches;
         }else {
-            OrderMatch matchedOrder(currentOrder->ownerID,currentOrder->id,currentOrder->quantity,currentOrder->price,OrderFillState::FULL);
+            OrderMatch matchedOrder{currentOrder->ownerID,currentOrder->id,currentOrder->quantity,currentOrder->price,OrderFillState::FULL};
             matches.addMatch(matchedOrder);
             order->quantity-=currentOrder->quantity;
             currentOrder->quantity=0;
@@ -182,10 +175,10 @@ MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
 };
 
 
-bool PriceLevelSortCompare(PriceLevel a, PriceLevel b) {
+bool PriceLevelSortCompare(const PriceLevel& a, const PriceLevel&  b) {
     return a.price < b.price;
 }
-bool PriceLevelReverseSortCompare(PriceLevel a, PriceLevel b) {
+bool PriceLevelReverseSortCompare(const PriceLevel& a,const PriceLevel& b) {
         return b.price < a.price;
 }
 

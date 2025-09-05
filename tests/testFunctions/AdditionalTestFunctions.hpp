@@ -7,7 +7,7 @@
 
 bool equalVectorPtr(std::vector<int*> input,std::vector<int*> expected);
 
-bool equalMatchesList(MatchesList input,MatchesList expected);
+bool MatchesListAreEqual(MatchesList input,MatchesList expected);
 
 struct orderDetails{
 	int orderQuantity{};
@@ -18,3 +18,5 @@ PriceLevel* createPriceLevel(OrderType orderType,OrderSide orderSide,
 
 
 std::pair<MatchesList,OrderFillState> createOrderBookAndMatch(Order *entryOrder,std::vector<PriceLevel*> restingPriceLevels,matchingAlgorithm* algorithm);
+
+

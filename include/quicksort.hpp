@@ -5,7 +5,7 @@
 
 
 template <typename T>
-void quickSort(std::vector<T*> &array,int start,int end,std::function<bool(T, T)> compare){
+void quickSort(std::vector<T*> &array,int start,int end,std::function<bool(const T&, const T&)> compare){
     if(start>=end)
         return;
     //order the elements
