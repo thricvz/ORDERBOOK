@@ -119,7 +119,7 @@ TEST(SELL_MARKET_ORDER,NO_MATCHES) {
 	int buyOrder3ID = 3;
 
 	Price buyPrice{0,0};	
-	PriceLevel* buyPriceLevel = createPriceLevel(OrderType::MARKET,OrderSide::SELL,buyPrice,
+	PriceLevel* buyPriceLevel = createPriceLevel(OrderType::MARKET,OrderSide::BUY,buyPrice,
 	{
 		{450,buyOrder1ID},
 		{49,buyOrder2ID},
@@ -128,7 +128,7 @@ TEST(SELL_MARKET_ORDER,NO_MATCHES) {
 
 
 	int sellOrderID = 44;	
-	Order *sellOrder  = new Order(OrderType::MARKET,OrderSide::BUY,200,sellOrderID); 		
+	Order *sellOrder  = new Order(OrderType::MARKET,OrderSide::SELL,200,sellOrderID); 		
    	
 	Fifo fifoAlgorithm;
 	auto matchResult = createOrderBookAndMatch(sellOrder,{buyPriceLevel},&fifoAlgorithm);	
@@ -209,7 +209,6 @@ TEST(SELL_MARKET_ORDER,PARTIAL_MATCH){
 	});	
 
 	int sellOrderID = 334;	
-
 	Order *sellOrder  = new Order(OrderType::MARKET,OrderSide::SELL,90,sellOrderID); 		
    	
 	Fifo fifoAlgorithm;
