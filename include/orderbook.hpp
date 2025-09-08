@@ -28,7 +28,8 @@ class Order{
         Order(OrderType _type,OrderSide _side,int quantity_,Price price,int id);
         Order(OrderType _type,OrderSide _side,int quantity_,int id);
         Order();
-
+				
+				friend bool ordersAreCompatible(const Order& rhs,const Order& lhs);	
         void setId(int id_);
         void setOwnerId(int id){ownerID = id;}
         OrderFillState getOrderFillState();

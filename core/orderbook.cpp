@@ -28,6 +28,11 @@ Order::Order(OrderType _type,OrderSide _side,int quantity_,int id) : Order(_type
     
 };
 
+friend bool ordersAreCompatible(const Order& rhs,const Order& lhs){
+		if((rhs->type == lhs->type) && (lhs->type == OrderType::Market))
+			return false;
+		return true;
+};	
 Order::Order(){
     type;
     side ;
