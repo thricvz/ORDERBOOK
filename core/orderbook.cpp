@@ -28,8 +28,8 @@ Order::Order(OrderType _type,OrderSide _side,int quantity_,int id) : Order(_type
     
 };
 
-friend bool ordersAreCompatible(const Order& rhs,const Order& lhs){
-		if((rhs->type == lhs->type) && (lhs->type == OrderType::Market))
+bool ordersAreCompatible(const Order& rhs,const Order& lhs){
+		if((rhs.type == lhs.type) && (lhs.type == OrderType::MARKET))
 			return false;
 		return true;
 };	
@@ -139,43 +139,35 @@ void Fifo::sortPriorities(PriceLevel *priceLevel,std::function<bool(Order,Order)
 
 };
 
-//the matching algorithm should modify the order
 MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
-    //need to check if the other order can be traded with
-    MatchesList matches;
-    sortPriorities(priceLevel,FifoPriorityCriteria);
-    int currentOrderIndex =0;
-    while (order->quantity>0 &&  currentOrderIndex < priceLevel->orders.size()) {
-        Order *currentOrder = priceLevel->orders[currentOrderIndex];
-        
-        if(currentOrder->ownerID == order->ownerID|| (currentOrder->type== MARKET && order->type==MARKET)){
-            currentOrderIndex++;
-            continue;
-        }
 
-        if (currentOrder->type==OrderType::LIMIT ) {
-            if ((currentOrder->side == OrderSide::SELL && order->price < currentOrder->price) || (currentOrder->side == OrderSide::BUY && currentOrder->price < order->price) ) {
-                currentOrderIndex++;
-                continue;
-            }
-        }
+		MatchesList matches{};
 
-        if (currentOrder->quantity > order->quantity) {
+		for( auto* matchOrder :priceLevel->orders){
+			if(order->quantity = 0)
+					break;		
 
-            OrderMatch matchedOrder{currentOrder->ownerID,currentOrder->id,order->quantity,currentOrder->price,OrderFillState::PARTIAL};
+			if(!ordersAreCompatible(*order,*matchOrder));	
+				continue;	
+			
+				
+      if (matchOrder->quantity > order->quantity) {
+
+            OrderMatch matchedOrder{matchOrder->id,matchOrder->ownerID,order->quantity,matchOrder->price,OrderFillState::PARTIAL};
             matches.addMatch(matchedOrder);
-            currentOrder->quantity-=order->quantity;
+            matchOrder->quantity-=order->quantity;
             order->quantity=0;
             return matches;
-        }else {
-            OrderMatch matchedOrder{currentOrder->ownerID,currentOrder->id,currentOrder->quantity,currentOrder->price,OrderFillState::FULL};
-            matches.addMatch(matchedOrder);
-            order->quantity-=currentOrder->quantity;
-            currentOrder->quantity=0;
-            currentOrderIndex++;
-        }
+			}
 
-    }
+			
+			OrderMatch matchedOrder{matchOrder->id,matchOrder->ownerID,matchOrder->quantity,matchOrder->price,OrderFillState::FULL};
+			matches.addMatch(matchedOrder);
+			order->quantity-=matchOrder->quantity;
+			matchOrder->quantity=0;
+
+
+		}
     return matches;
 };
 
@@ -191,83 +183,69 @@ bool PriceLevelReverseSortCompare(const PriceLevel& a,const PriceLevel& b) {
 
 
 std::pair<MatchesList,OrderFillState> OrderBook::match(Order *order) {
-    //decide how to match according to the order type(Market,Limit)
-    std::pair<MatchesList,OrderFillState> MatchState;
-    if (order->side == OrderSide::BUY) {
-        if(order->type == OrderType::MARKET){
-            MatchState = matchBuyMarket(order);
-        }
-        if(order->type == OrderType::LIMIT){
-            MatchState = matchBuyLimit(order);
-        }
-    }
+    std::pair<MatchesList,OrderFillState> matchResult;
+		
+		if(order->side == OrderSide::BUY){
+			matchResult = matchBuyOrder(order);
+		}else{
+			matchResult = matchSellOrder(order);
+		};	
 
-    if (order->side == OrderSide::SELL) {
-        if(order->type == OrderType::MARKET){
-            MatchState = matchSellMarket(order);
-        }
-        if(order->type == OrderType::LIMIT){
-            MatchState = matchSellLimit(order);
-        }
-    }
-    return MatchState;
+    return matchResult;
 };
 
 
 //need to implement a destructor for the orderbook class
-
-std::pair<MatchesList,OrderFillState> OrderBook::matchBuyLimit(Order *order) {
-    int currentPriceLevel = 0;
-    MatchesList allMatches;
+ std::pair<MatchesList,OrderFillState> OrderBook::matchSellOrder(Order *order){
+    //quickSort<PriceLevel>(SellOrders, 0, SellOrders.size() - 1, PriceLevelSortCompare);
+    MatchesList allMatches{};
     quickSort<PriceLevel>(SellOrders, 0, SellOrders.size() - 1, PriceLevelSortCompare);
-    //i should have done a <= operator for prices :'(
-    int originalOrderQuantity = order->quantity;
-    while (
-        currentPriceLevel < SellOrders.size() && (
-            (SellOrders[currentPriceLevel]->price < order->price) || (SellOrders[currentPriceLevel]->price == order->price))
-        && order->quantity > 0) {
-        MatchesList currentPriceLevelMatches = algorithm->match(order, SellOrders[currentPriceLevel]);
-        allMatches.extend(currentPriceLevelMatches);
+
+		bool isLimitOrder	= order->type==OrderType::LIMIT;
+
+		for (auto* buyPriceLevel : SellOrders){
+				if(isLimitOrder && (buyPriceLevel->price < order->price))
+					break;				
+
+				MatchesList matchesInPriceLevel = algorithm->match(order,buyPriceLevel);
+        allMatches.extend(matchesInPriceLevel);
 
 
         //delete every filled order from the priceLevel
-        for (auto match: currentPriceLevelMatches.matches) {
+        for (auto match: matchesInPriceLevel.matches) {
             if (match.matchingResult == OrderFillState::FULL)
-                SellOrders[currentPriceLevel]->remove_order(match.orderId);
+                buyPriceLevel->remove_order(match.orderId);
         }
-        currentPriceLevel++;
-    }
+		};
+    
+		OrderFillState orderFinalState = order->getOrderFillState();
+    return std::pair<MatchesList, OrderFillState>(allMatches, orderFinalState);
+};
 
-    //determine if the order was filled or not
-    OrderFillState entryOrderState = order->getOrderFillState();
-    return std::pair<MatchesList, OrderFillState>(allMatches, entryOrderState);
-}
-;
-
-std::pair<MatchesList,OrderFillState> OrderBook::matchSellLimit(Order *order){
-    int currentPriceLevel = 0;
-    MatchesList allMatches;
+ std::pair<MatchesList,OrderFillState> OrderBook::matchBuyOrder(Order *order){
+    MatchesList allMatches{};
     quickSort<PriceLevel>(BuyOrders, 0, BuyOrders.size() - 1, PriceLevelReverseSortCompare);
-    //i should have done a <= operator for prices :'(
-    int originalOrderQuantity = order->quantity;
-    while (
-        currentPriceLevel < BuyOrders.size() && ((order->price < BuyOrders[currentPriceLevel]->price) || (BuyOrders[currentPriceLevel]->price == order->price)) && order->quantity > 0) {
-        MatchesList currentPriceLevelMatches = algorithm->match(order, BuyOrders[currentPriceLevel]);
-        allMatches.extend(currentPriceLevelMatches);
+
+		bool isLimitOrder	= order->type==OrderType::LIMIT;
+
+		for (auto* sellPriceLevel : BuyOrders){
+				if(isLimitOrder && (order->price < sellPriceLevel->price))
+					break;				
+
+				MatchesList matchesInPriceLevel = algorithm->match(order,sellPriceLevel);
+        allMatches.extend(matchesInPriceLevel);
 
 
         //delete every filled order from the priceLevel
-        for (auto match: currentPriceLevelMatches.matches) {
+		
+        for (auto match: matchesInPriceLevel.matches) {
             if (match.matchingResult == OrderFillState::FULL)
-                BuyOrders[currentPriceLevel]->remove_order(match.orderId);
+                sellPriceLevel->remove_order(match.orderId);
         }
-        currentPriceLevel++;
-        }
-
-    //determine if the order was filled or not
-    OrderFillState entryOrderState = order->getOrderFillState();
-    return std::pair<MatchesList, OrderFillState>(allMatches, entryOrderState);
-
+		};
+    
+		OrderFillState orderFinalState = order->getOrderFillState();
+    return std::pair<MatchesList, OrderFillState>(allMatches, orderFinalState);
 };
 
 OrderBook::~OrderBook(){
@@ -280,53 +258,6 @@ OrderBook::~OrderBook(){
 		delete pricelevel;	
 	};
 }; 
-
-std::pair<MatchesList,OrderFillState> OrderBook::matchBuyMarket(Order *order){
-    int currentPriceLevel = 0;
-    MatchesList allMatches;
-    quickSort<PriceLevel>(SellOrders, 0, SellOrders.size() - 1, PriceLevelSortCompare);
-    //i should have done a <= operator for prices :'(
-    int originalOrderQuantity = order->quantity;
-    while ((currentPriceLevel < SellOrders.size()) && (order->quantity > 0)) {
-        MatchesList currentPriceLevelMatches = algorithm->match(order, SellOrders[currentPriceLevel]);
-        allMatches.extend(currentPriceLevelMatches);
-
-
-        //delete every filled order from the priceLevel
-        for (auto match: currentPriceLevelMatches.matches) {
-            if (match.matchingResult == OrderFillState::FULL)
-                SellOrders[currentPriceLevel]->remove_order(match.orderId);
-        }
-        currentPriceLevel++;
-        }
-
-    //determine if the order was filled or not
-    OrderFillState entryOrderState = order->getOrderFillState();
-    return std::pair<MatchesList, OrderFillState>(allMatches, entryOrderState);
-};
-std::pair<MatchesList,OrderFillState> OrderBook::matchSellMarket(Order *order){
-    int currentPriceLevel = 0;
-    MatchesList allMatches;
-    quickSort<PriceLevel>(BuyOrders, 0, BuyOrders.size() - 1, PriceLevelReverseSortCompare);
-    //i should have done a <= operator for prices :'(
-    int originalOrderQuantity = order->quantity;
-    while ((currentPriceLevel < BuyOrders.size()) && (order->quantity > 0)) {
-        MatchesList currentPriceLevelMatches = algorithm->match(order, BuyOrders[currentPriceLevel]);
-        allMatches.extend(currentPriceLevelMatches);
-
-
-        //delete every filled order from the priceLevel
-        for (auto match: currentPriceLevelMatches.matches) {
-            if (match.matchingResult == OrderFillState::FULL)
-                BuyOrders[currentPriceLevel]->remove_order(match.orderId);
-        }
-        currentPriceLevel++;
-    }
-
-    //determine if the order was filled or not
-    OrderFillState entryOrderState = order->getOrderFillState();
-    return std::pair<MatchesList, OrderFillState>(allMatches, entryOrderState);
-};
 
 std::pair<MatchesList,OrderFillState> OrderBook::addOrder(Order *entryOrder) {
     std::pair<MatchesList,OrderFillState> matchResult =  match(entryOrder);

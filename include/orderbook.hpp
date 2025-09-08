@@ -118,12 +118,9 @@ class OrderBook{
             
       	    ~OrderBook(); 
 
-            // implement a function for each case
-            std::pair<MatchesList,OrderFillState> matchBuyLimit(Order *order);
-            std::pair<MatchesList,OrderFillState> matchSellLimit(Order *order);
-            std::pair<MatchesList,OrderFillState> matchBuyMarket(Order *order);
-            std::pair<MatchesList,OrderFillState> matchSellMarket(Order *order);
-            
+            // implement a function for each case (future eric here: there is absolutely no need for that)
+            std::pair<MatchesList,OrderFillState> matchBuyOrder(Order *order);
+            std::pair<MatchesList,OrderFillState> matchSellOrder(Order *order);
             // To provide a list of orders for testing the matching functions independently from the addOrder Method
             void chargeTestOrders(std::vector<PriceLevel*> TestBuyOrders,std::vector<PriceLevel*> TestSellOrders) {
                 SellOrders = TestSellOrders;
