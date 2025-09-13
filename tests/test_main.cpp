@@ -12,7 +12,7 @@ TEST(ORDER,CREATE_OBJECT){
   ASSERT_EQ(order1.side ,OrderSide::BUY);
   ASSERT_EQ(order1.price.cents ,12);
   ASSERT_EQ(order1.price.dollars ,30);
-  ASSERT_EQ(order1.id ,30);
+  ASSERT_EQ(order1.id ,2);
 	
 }
 

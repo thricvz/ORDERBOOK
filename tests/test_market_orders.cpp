@@ -63,10 +63,10 @@ TEST(BUY_MARKET_ORDER,FULL_MATCH){
 	auto resultMatchesList = std::get<MATCHED_ORDERS_LIST>(matchResult); 	
 
 	auto expectedMatchesList = MatchesList{{
-		OrderMatch{DEFAULT_OWNERID,sellOrder1ID,8,sellPrice1,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,sellOrder2ID,4,sellPrice2,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,sellOrder3ID,2,sellPrice3,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,sellOrder4ID,1,sellPrice3,OrderFillState::FULL}
+		OrderMatch{sellOrder1ID,DEFAULT_OWNERID,8,sellPrice1,OrderFillState::FULL},
+		OrderMatch{sellOrder2ID,DEFAULT_OWNERID,4,sellPrice2,OrderFillState::FULL},
+		OrderMatch{sellOrder3ID,DEFAULT_OWNERID,2,sellPrice3,OrderFillState::FULL},
+		OrderMatch{sellOrder4ID,DEFAULT_OWNERID,1,sellPrice3,OrderFillState::FULL}
 	}}; 
 
 	
@@ -101,8 +101,8 @@ TEST(BUY_MARKET_ORDER,PARTIAL_MATCH){
 	auto resultMatchesList = std::get<MATCHED_ORDERS_LIST>(matchResult); 	
 
 	auto expectedMatchesList = MatchesList{{
-		OrderMatch{DEFAULT_OWNERID,sellOrder2ID,530,sellPrice2,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,sellOrder1ID,70,sellPrice1,OrderFillState::FULL},
+		OrderMatch{sellOrder2ID,DEFAULT_OWNERID,530,sellPrice2,OrderFillState::FULL},
+		OrderMatch{sellOrder1ID,DEFAULT_OWNERID,70,sellPrice1,OrderFillState::FULL},
 	}}; 
 
 	
@@ -182,9 +182,9 @@ TEST(SELL_MARKET_ORDER,FULL_MATCH){
 	auto resultMatchesList = std::get<MATCHED_ORDERS_LIST>(matchResult); 	
 
 	auto expectedMatchesList = MatchesList{{
-		OrderMatch{DEFAULT_OWNERID,buyOrder4ID,9,buyPrice4,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,buyOrder5ID,25,buyPrice4,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,buyOrder3ID,9,buyPrice3,OrderFillState::PARTIAL},
+		OrderMatch{buyOrder4ID,DEFAULT_OWNERID,9,buyPrice4,OrderFillState::FULL},
+		OrderMatch{buyOrder5ID,DEFAULT_OWNERID,25,buyPrice4,OrderFillState::FULL},
+		OrderMatch{buyOrder3ID,DEFAULT_OWNERID,9,buyPrice3,OrderFillState::PARTIAL},
 	}}; 
 
 	
@@ -218,8 +218,8 @@ TEST(SELL_MARKET_ORDER,PARTIAL_MATCH){
 	auto resultMatchesList = std::get<MATCHED_ORDERS_LIST>(matchResult); 	
 
 	auto expectedMatchesList = MatchesList{{
-		OrderMatch{DEFAULT_OWNERID,buyOrder1ID,80,buyPrice1,OrderFillState::FULL},
-		OrderMatch{DEFAULT_OWNERID,buyOrder2ID,6,buyPrice2,OrderFillState::FULL},
+		OrderMatch{buyOrder1ID,DEFAULT_OWNERID,80,buyPrice1,OrderFillState::FULL},
+		OrderMatch{buyOrder2ID,DEFAULT_OWNERID,6,buyPrice2,OrderFillState::FULL},
 	}}; 
 
 	

@@ -144,10 +144,10 @@ MatchesList Fifo::match(Order *order, PriceLevel *priceLevel){
 		MatchesList matches{};
 
 		for( auto* matchOrder :priceLevel->orders){
-			if(order->quantity = 0)
+			if(order->quantity == 0)
 					break;		
 
-			if(!ordersAreCompatible(*order,*matchOrder));	
+			if(!ordersAreCompatible(*order,*matchOrder))	
 				continue;	
 			
 				
@@ -197,13 +197,12 @@ std::pair<MatchesList,OrderFillState> OrderBook::match(Order *order) {
 
 //need to implement a destructor for the orderbook class
  std::pair<MatchesList,OrderFillState> OrderBook::matchSellOrder(Order *order){
-    //quickSort<PriceLevel>(SellOrders, 0, SellOrders.size() - 1, PriceLevelSortCompare);
     MatchesList allMatches{};
-    quickSort<PriceLevel>(SellOrders, 0, SellOrders.size() - 1, PriceLevelSortCompare);
+    quickSort<PriceLevel>(BuyOrders, 0, BuyOrders.size() - 1, PriceLevelReverseSortCompare);
 
 		bool isLimitOrder	= order->type==OrderType::LIMIT;
 
-		for (auto* buyPriceLevel : SellOrders){
+		for (auto* buyPriceLevel : BuyOrders){
 				if(isLimitOrder && (buyPriceLevel->price < order->price))
 					break;				
 
@@ -224,11 +223,11 @@ std::pair<MatchesList,OrderFillState> OrderBook::match(Order *order) {
 
  std::pair<MatchesList,OrderFillState> OrderBook::matchBuyOrder(Order *order){
     MatchesList allMatches{};
-    quickSort<PriceLevel>(BuyOrders, 0, BuyOrders.size() - 1, PriceLevelReverseSortCompare);
+    quickSort<PriceLevel>(SellOrders, 0, SellOrders.size() - 1, PriceLevelSortCompare);
 
 		bool isLimitOrder	= order->type==OrderType::LIMIT;
 
-		for (auto* sellPriceLevel : BuyOrders){
+		for (auto* sellPriceLevel : SellOrders){
 				if(isLimitOrder && (order->price < sellPriceLevel->price))
 					break;				
 
